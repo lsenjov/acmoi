@@ -1506,3 +1506,51 @@ notifying browser that file changed:  out/ppp/core.js
 [32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 0.65 seconds.[0m
 notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
 notifying browser that file changed:  out/ppp/core.js
+[0mCompiling "resources/public/js/compiled/ppp.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 0.674 seconds.[0m
+[0mCompiling "resources/public/js/compiled/ppp.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 1.554 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/ppp/spec.js
+[0mCompiling "resources/public/js/compiled/ppp.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 0.802 seconds.[0m
+[0mCompiling "resources/public/js/compiled/ppp.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 0.646 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/spec.js
+[0mCompiling "resources/public/js/compiled/ppp.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 0.893 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/core.js
+[0mCompiling "resources/public/js/compiled/ppp.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/ppp.js" in 0.724 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/core.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.818 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/core.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.601 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/core.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.634 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.606 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.63 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.592 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/spec.js

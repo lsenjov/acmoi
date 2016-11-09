@@ -1,9 +1,9 @@
-(ns ppp.core
+(ns acmoi.core
   (:require [reagent.core :as reagent :refer [atom]]))
 
 (enable-console-print!)
 
-(println "This text is printed from src/ppp/core.cljs. Go ahead and edit it and see reloading in action.")
+(println "This text is printed from src/acmoi/core.cljs. Go ahead and edit it and see reloading in action.")
 
 ;; define your app data so that it doesn't get over-written on reload
 
