@@ -1,10 +1,10 @@
 # ppp
 
-FIXME: Write a one-line description of your library/project.
+Alpha Complex Ministy of Information.
 
 ## Overview
 
-FIXME: Write a paragraph about the library/project and highlight its goals.
+You are an investigator in Alpha Complex's Internal Security, searching through records to sniff out treason. Starting at RED clearance, you will work your way up through the ranks and gain control over staff, and eventually may even make it to head of IntSec. Just be aware of other players looking to clamber up over your corpse.
 
 ## Setup
 
@@ -34,6 +34,6 @@ get live reloading, nor a REPL.
 
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Logan Senjov
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
