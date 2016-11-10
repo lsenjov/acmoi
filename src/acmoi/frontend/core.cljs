@@ -20,8 +20,8 @@
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
-  {"IR" {:color "White" :background-color "Black"}
-   "R" {:color "White" :background-color "DarkRed"}
+  {:IR {:color "White" :background-color "Black"}
+   :R {:color "White" :background-color "DarkRed"}
    }
   )
 
@@ -29,7 +29,7 @@
   "Prints a citizen's name from a map"
   [{:keys [fName zone clearance cloneNum]}]
   (str fName "-"
-       (if (= "IR" clearance)
+       (if (= :IR clearance)
          ""
          (str (name clearance) "-")
          )
