@@ -1554,3 +1554,158 @@ notifying browser that file changed:  out/acmoi/spec.js
 [32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.592 seconds.[0m
 notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
 notifying browser that file changed:  out/acmoi/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.715 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/goog/deps.js
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.962 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.664 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.65 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.7 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.78 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.652 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.786 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.65 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.692 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.677 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.716 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.594 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.612 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.614 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.652 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.632 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.621 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.616 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.619 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.629 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.619 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.662 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.64 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.679 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/frontend/core.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.689 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/frontend/core.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.816 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.735 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.646 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.591 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/spec.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.557 seconds.[0m
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.563 seconds.[0m
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.568 seconds.[0m
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.588 seconds.[0m
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.614 seconds.[0m
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.571 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/helpers.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.647 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/helpers.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.684 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/helpers.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.621 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/helpers.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.737 seconds.[0m
+notifying browser that file changed:  resources/public/js/compiled/out/cljs_deps.js
+notifying browser that file changed:  out/acmoi/shared/helpers.js
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.602 seconds.[0m
+[0mCompiling "resources/public/js/compiled/acmoi.js" from ["src"]...[0m
+[32mSuccessfully compiled "resources/public/js/compiled/acmoi.js" in 0.593 seconds.[0m

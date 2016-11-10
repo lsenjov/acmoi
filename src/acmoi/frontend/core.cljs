@@ -1,4 +1,4 @@
-(ns acmoi.core
+(ns acmoi.frontend.core
   (:require [reagent.core :as reagent :refer [atom]]))
 
 (enable-console-print!)
@@ -9,10 +9,10 @@
 
 ;; TODO change back to defonce when required
 (def app-state (atom
-                 {:poi
-                  {1 {:fName "Tray" :zone "TOR" :clearance "IR" :cloneNum 3 :citizenId 1 :associates [2 3]}
-                   2 {:fName "Ann" :zone "KEY" :clearance "R" :cloneNum 3 :citizenId 2 :associates [1 3]}
-                   3 {:fName "Tu" :zone "KEY" :clearance "R" :cloneNum 3 :citizenId 2 :associates [1 2]}
+                 {:citizens
+                  {1 {:fName "Tray" :zone "TOR" :clearance :IR :cloneNum 3 :citizenId 1 :associates [2 3] :male? true}
+                   2 {:fName "Ann" :zone "KEY" :clearance :R :cloneNum 3 :citizenId 2 :associates [1 3] :male? false}
+                   3 {:fName "Tu" :zone "KEY" :clearance :R :cloneNum 3 :citizenId 2 :associates [1 2] :male? true}
                    }
                   }
                  )
@@ -31,7 +31,7 @@
   (str fName "-"
        (if (= "IR" clearance)
          ""
-         (str clearance "-")
+         (str (name clearance) "-")
          )
        zone "-"
        cloneNum
@@ -40,7 +40,7 @@
 
 (defn create-citizen-box
   [n]
-  (let [cmap (get-in @app-state [:poi n])
+  (let [cmap (get-in @app-state [:citizens n])
         expand (atom false)]
     (fn []
       [:div {:style (-> {:margin "2px"}
@@ -76,7 +76,7 @@
   (let [expand (atom false)]
     (fn []
       [:div
-       [:div (doall (for [n (-> @app-state :poi keys)]
+       [:div (doall (for [n (-> @app-state :citizens keys)]
                       ^{:key n}
                       [create-citizen-box n]
                                      ))]

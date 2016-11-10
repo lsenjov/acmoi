@@ -1,5 +1,5 @@
 (defproject acmoi "0.1.0-SNAPSHOT"
-  :description "FIXME: write this!"
+  :description "Alpha Complex Ministry of Information"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -10,10 +10,25 @@
                  [org.clojure/clojurescript "1.9.229"]
                  [org.clojure/core.async "0.2.391"
                   :exclusions [org.clojure/tools.reader]]
-                 [reagent "0.6.0"]]
+                 [reagent "0.6.0"]
+
+                 ;; Web Server
+                 [compojure "1.4.0"]
+                 [ring "1.5.0"]
+                 [ring/ring-defaults "0.2.1"]
+                 [ring/ring-anti-forgery "1.0.1"]
+
+                 ;; Logging Deps
+                 [com.taoensso/timbre "4.7.4"]
+
+                 ;; Json Deps
+                 [org.clojure/data.json "0.2.6"]
+                 ]
 
   :plugins [[lein-figwheel "0.5.8"]
-            [lein-cljsbuild "1.1.4" :exclusions [[org.clojure/clojure]]]]
+            [lein-cljsbuild "1.1.4" :exclusions [[org.clojure/clojure]]]
+            [lein-ring "0.9.7"]
+            ]
 
   :source-paths ["src"]
 
@@ -26,14 +41,14 @@
                 ;; the presence of a :figwheel configuration here
                 ;; will cause figwheel to inject the figwheel client
                 ;; into your build
-                :figwheel {:on-jsload "acmoi.core/on-js-reload"
+                :figwheel {:on-jsload "acmoi.frontend.core/on-js-reload"
                            ;; :open-urls will pop open your application
                            ;; in the default browser once Figwheel has
                            ;; started and complied your application.
                            ;; Comment this out once it no longer serves you.
                            :open-urls ["http://localhost:3449/index.html"]}
 
-                :compiler {:main acmoi.core
+                :compiler {:main acmoi.frontend.core
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/acmoi.js"
                            :output-dir "resources/public/js/compiled/out"
@@ -47,7 +62,7 @@
                {:id "min"
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/js/compiled/acmoi.js"
-                           :main acmoi.core
+                           :main acmoi.frontend.core
                            :optimizations :advanced
                            :pretty-print false}}]}
 
@@ -66,7 +81,7 @@
 
              ;; doesn't work for you just run your own server :) (see lein-ring)
 
-             ;; :ring-handler hello_world.server/handler
+             :ring-handler acmoi.server.handler/app
 
              ;; To be able to open files in your editor from the heads up display
              ;; you will need to put a script on your path.
@@ -87,6 +102,7 @@
              ;; :server-logfile "tmp/logs/figwheel-logfile.log"
              }
 
+  :ring {:handler acmoi.server.handler/app}
 
   ;; setting up nREPL for Figwheel and ClojureScript dev
   ;; Please see:
@@ -95,7 +111,9 @@
 
   :profiles {:dev {:dependencies [[binaryage/devtools "0.8.2"]
                                   [figwheel-sidecar "0.5.8"]
-                                  [com.cemerick/piggieback "0.2.1"]]
+                                  [com.cemerick/piggieback "0.2.1"]
+                                  [org.clojure/test.check "0.9.0"]
+                                  ]
                    ;; need to add dev source path here to get user.clj loaded
                    :source-paths ["src" "dev"]
                    ;; for CIDER
