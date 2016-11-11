@@ -37,6 +37,8 @@
       :cloneNum 1
       :commendations 0
       :treason 0
+      ;; TODO Remove, this is just for debugging
+      :associates (vec (repeatedly (rand-int 20) #(rand-int 1000)))
       }
      }
     )

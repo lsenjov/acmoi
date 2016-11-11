@@ -57,3 +57,15 @@
     (helpers/filter-keys c #{:citizenId :clearance :fName :zone :cloneNum :gender :commendations :treason :dead?})
     )
   )
+(defn get-citizen-associates
+  "Gets the associates of a citizen. If none, returns empty vector. If no citizen, returns nil"
+  [^String userKey ^String citizenId]
+  (log/trace "get-citizen-associates. userKey:" userKey "citizenId:" citizenId)
+  (if-let [c (get-in @sector [:citizens (helpers/parse-int citizenId)])]
+    (if-let [a (get c :associates)]
+      a
+      []
+      )
+    nil
+    )
+  )

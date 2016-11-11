@@ -1,5 +1,6 @@
 (ns acmoi.frontend.core
-  (:require [reagent.core :as reagent :refer [atom]]
+  (:require [taoensso.timbre :as log]
+            [reagent.core :as reagent :refer [atom]]
             [ajax.core :refer [GET POST] :as ajax]
             [cljs.js :as cjs]
             ))
@@ -12,15 +13,11 @@
 
 ;; TODO change back to defonce when required
 (def app-state (atom
-                 {:citizens
-                  {1 {:fName "Tray" :zone "TOR" :clearance :IR :cloneNum 3 :citizenId 1 :associates [2 3] :male? true}
-                   2 {:fName "Ann" :zone "KEY" :clearance :R :cloneNum 3 :citizenId 2 :associates [1 3] :male? false}
-                   3 {:fName "Tu" :zone "KEY" :clearance :R :cloneNum 3 :citizenId 2 :associates [1 2] :male? true}
-                   }
+                 {:citizens {}
                   }
                  )
   )
-(def userInfo (atom {:userCitizen 1 :apiKey "tempApiKey"}))
+(def userInfo (atom {:userCitizen 1 :userKey "tempApiKey"}))
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
@@ -32,60 +29,90 @@
 (defn- get-citizen-basic
   "Gets basic citizen info"
   [citizenId]
-  (-> (ajax/easy-ajax-request
-        "localhost:3000/api/citizen/basic/"
-        :get
-        {:params {:apiKey @userInfo :citizenId citizenId}
-         :response-format :json}
-        )
-      js->clj
-      )
+  (GET "/api/citizen/basic/"
+       {:params {:citizenId citizenId
+                 :userKey (:userKey @userInfo)}
+        :response-format (ajax/json-response-format {:keywords? true})
+        :handler (fn [m]
+                   (swap! app-state assoc-in [:citizens citizenId] m)
+                   (log/info "app-state is now:" @app-state)
+                   )
+        }
+       )
+  )
+
+(defn- get-citizen-associates
+  "Gets the associates of a citizen"
+  [citizenId]
+  (GET "/api/citizen/associates/"
+       {:params {:citizenId citizenId
+                 :userKey (:userKey @userInfo)}
+        :response-format (ajax/json-response-format {:keywords? true})
+        :handler #(do (log/trace "Requesting associates of citizen" citizenId)
+                      (swap! app-state assoc-in [:citizens citizenId :associates] %)
+                      )
+        }
+       )
   )
 
 (defn- print-person-name
   "Prints a citizen's name from a map"
   [{:keys [fName zone clearance cloneNum]}]
-  (str fName "-"
-       (if (= :IR clearance)
-         ""
-         (str (name clearance) "-")
+  (if fName
+    (str fName "-"
+         (if (= :IR clearance)
+           ""
+           (str (name clearance) "-")
+           )
+         zone "-"
+         cloneNum
          )
-       zone "-"
-       cloneNum
-       )
+    "Unknown"
+    )
   )
 
 (defn create-citizen-box
   [n]
-  (let [cmap (get-in @app-state [:citizens n])
-        expand (atom false)]
+  (let [expand (atom false)]
     (fn []
-      [:div {:style (-> {:margin "2px"}
-                        (#(if @expand
-                            (merge % {:border "1px solid white"})
-                            %))
-                        (merge (get colour-styles (:clearance cmap)))
-                        )
-              }
-       (if @expand
-         [:span
-          [:span {:onClick #(do (js/console.log (str "Clicked on person:" n))
-                                (swap! expand not)
-                                false)
-                  }
-           "Name: " (print-person-name cmap)] [:br]
-          "Id Number:" n [:br]
-          "Known associates:" [:br]
-          (for [p (:associates cmap)]
-            [create-citizen-box p])
-          ]
-         [:span {:onClick #(do (js/console.log (str "Clicked on person:" n))
-                               (swap! expand not)
-                               false)
-                 }
-          (print-person-name cmap)]
-         )
-       ]
+      (let [cmap (get-in @app-state [:citizens n])]
+        [:div {:style (-> {:margin "2px"}
+                          (#(if @expand
+                              (merge % {:border "1px solid white"})
+                              %))
+                          (merge (get colour-styles (keyword (:clearance cmap)) {:color "Red" :background-color "Black"}))
+                          )
+               :onClick #(if (not (:citizenId cmap)) (get-citizen-basic n) nil)
+               }
+         (if @expand
+           [:span
+            [:span {:onClick #(do (js/console.log (str "Clicked on person:" n))
+                                  (swap! expand not)
+                                  false)
+                    }
+             "Name: " (print-person-name cmap)] [:br]
+            "Id Number:" n [:br]
+            (if (:associates cmap)
+              ;; Associates known
+              [:span "Known associates:" [:br]
+               (for [p (:associates cmap)]
+                 [create-citizen-box p])
+               ]
+              ;; Associates unknown
+              [:span {:onClick #(get-citizen-associates n)}
+               "##Get Associates##"
+               ]
+              )
+
+              ]
+           [:span {:onClick #(do (js/console.log (str "Clicked on person:" n))
+                                 (swap! expand not)
+                                 false)
+                   }
+            (print-person-name cmap)]
+           )
+         ]
+        )
       )
     )
   )
@@ -93,20 +120,17 @@
   (let [expand (atom false)]
     (fn []
       [:div
-       [:div (doall (for [n (-> @app-state :citizens keys)]
+       [:div (doall (for
+                      ;;[n (-> @app-state :citizens keys)]
+                      [n (range 1 6)]
                       ^{:key n}
                       [create-citizen-box n]
                                      ))]
        [:div {:style {:color "White"}}
-        ;(pr-str (get-citizen-basic 3))
-        (-> "/api/citizen/basic/asdf/2/"
-            (GET {:response-format :json
-                  ;;:handler (fn [m] (assoc-in app-state [:citizens 3] m))
-                  :handler (fn [m] (log/info m))
-                  }
-                 )
-            ;(js->clj)
-            (pr-str)
+        ]
+       [:div {:style {:color "White"}}
+        (-> (assoc (ajax/json-response-format) :keywords? true)
+            pr-str
             )
         ]
        ]
