@@ -1,5 +1,8 @@
 (ns acmoi.frontend.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent :refer [atom]]
+            [ajax.core :refer [GET POST] :as ajax]
+            [cljs.js :as cjs]
+            ))
 
 (enable-console-print!)
 
@@ -17,12 +20,26 @@
                   }
                  )
   )
+(def userInfo (atom {:userCitizen 1 :apiKey "tempApiKey"}))
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
   {:IR {:color "White" :background-color "Black"}
    :R {:color "White" :background-color "DarkRed"}
    }
+  )
+
+(defn- get-citizen-basic
+  "Gets basic citizen info"
+  [citizenId]
+  (-> (ajax/easy-ajax-request
+        "localhost:3000/api/citizen/basic/"
+        :get
+        {:params {:apiKey @userInfo :citizenId citizenId}
+         :response-format :json}
+        )
+      js->clj
+      )
   )
 
 (defn- print-person-name
@@ -80,6 +97,18 @@
                       ^{:key n}
                       [create-citizen-box n]
                                      ))]
+       [:div {:style {:color "White"}}
+        ;(pr-str (get-citizen-basic 3))
+        (-> "/api/citizen/basic/asdf/2/"
+            (GET {:response-format :json
+                  ;;:handler (fn [m] (assoc-in app-state [:citizens 3] m))
+                  :handler (fn [m] (log/info m))
+                  }
+                 )
+            ;(js->clj)
+            (pr-str)
+            )
+        ]
        ]
       )
     )

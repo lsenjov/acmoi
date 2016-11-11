@@ -7,9 +7,7 @@
             )
   )
 
+;; Switches for debugging
+(s/check-asserts false)
 (s/check-asserts true)
-(-> sg/default-sector
-    (sg/add-new-citizen)
-    (sg/add-new-citizen)
-    (sg/add-new-citizen)
-    )
+

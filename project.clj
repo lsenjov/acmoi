@@ -11,6 +11,7 @@
                  [org.clojure/core.async "0.2.391"
                   :exclusions [org.clojure/tools.reader]]
                  [reagent "0.6.0"]
+                 [cljs-ajax "0.5.8"]
 
                  ;; Web Server
                  [compojure "1.4.0"]
@@ -46,7 +47,7 @@
                            ;; in the default browser once Figwheel has
                            ;; started and complied your application.
                            ;; Comment this out once it no longer serves you.
-                           :open-urls ["http://localhost:3449/index.html"]}
+                           ;; :open-urls ["http://localhost:3449/index.html"]}
 
                 :compiler {:main acmoi.frontend.core
                            :asset-path "js/compiled/out"
@@ -81,7 +82,7 @@
 
              ;; doesn't work for you just run your own server :) (see lein-ring)
 
-             :ring-handler acmoi.server.handler/app
+             ;; :ring-handler acmoi.server.handler/app
 
              ;; To be able to open files in your editor from the heads up display
              ;; you will need to put a script on your path.

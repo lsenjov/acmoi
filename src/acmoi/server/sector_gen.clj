@@ -6,52 +6,12 @@
             )
   )
 
-(def ^:private filename
-  "The file sectors are saved and loaded from"
-  "sector.edn")
-
-(defn- sector-load
-  "Loads a sector from storage. Currently just loads from file"
-  []
-  {:post [(s/or :nil nil?
-                :sector (s/assert ::ss/sector %))]}
-  (try
-    (-> filename slurp clojure.edn/read-string)
-    (catch java.io.FileNotFoundException e
-      (do (log/info "Could not find file" filename "to load from.")
-          nil
-          )
-      )
-    )
-  )
-(defn- sector-save
-  "Saves a sector to storage. Currently just saves to file
-  Returns true on success, else false"
-  [sector]
-  {:pre [(s/assert ::ss/sector sector)]
-   :post [(s/assert boolean? %)]}
-  (try (do (spit filename (pr-str sector))
-           true)
-       (catch Exception e
-         (do (log/error "Could not save to file" filename "Exception:" e)
-             false)
-         )
-       )
-  )
-
 (def default-sector
   "The default setup of an empty sector. Useful for testing."
   {:zone "ABC"
    ;; The next id to use
    :citizenId 1
    :citizens {}}
-  )
-
-(defonce ^:private sector
-  (if-let [z (sector-load)]
-    (agent z)
-    (agent default-sector)
-    )
   )
 
 (defn- generate-first-name
@@ -64,26 +24,51 @@
 
 (defn- generate-citizen
   "Generates a brand new adult citizen for the sector"
-  [{:keys [citizenId zone] :as sector}]
-  {:post [(s/assert ::ss/citizenMap %)]}
+  [zone citizenId]
+  {:post [(s/assert ::ss/citizens %)]}
+  (log/trace "Generate-citizen:" zone citizenId)
   (let [gender (rand-nth [:male :female])]
-    {:gender gender
-     :fName (generate-first-name gender)
-     :clearance :IR
-     :zone zone
-     :citizenId citizenId
-     :cloneNum 1
+    {citizenId
+     {:gender gender
+      :fName (generate-first-name gender)
+      :clearance :IR
+      :zone zone
+      :citizenId citizenId
+      :cloneNum 1
+      :commendations 0
+      :treason 0
+      }
      }
     )
   )
 
 (defn add-new-citizen
-  "Adds a generated citizen to a sector, and increments the next id"
-  [sector]
-  {:pre [(s/assert ::ss/sector sector)]
-   :post [(s/assert ::ss/sector %)]}
-  (-> sector
-      (assoc-in [:citizens (:citizenId sector)] (generate-citizen sector))
-      (update-in [:citizenId] inc)
+  "Adds a number of generated citizens to a sector, and increments the next id.
+  If n not supplied, defaults to 1 more citizen"
+  ([{:keys [citizenId zone] :as sector} n]
+   {:pre [(s/assert ::ss/sector sector)]
+    :post [(s/assert ::ss/sector %)]}
+   (log/trace "add-new-citizen. CitizenId:" citizenId "Zone:" zone "n:" n)
+   (let [nextId (+ citizenId n)]
+     (-> sector
+         (update-in [:citizens]
+                    merge
+                    (apply merge
+                           (map generate-citizen
+                                (repeat zone)
+                                (range citizenId nextId))))
+         (assoc-in [:citizenId] nextId)
+         )
+     )
+   )
+  ([sector]
+   (add-new-citizen sector 1))
+  )
+
+(defn generate-sector
+  "Generates a random sector, promotes those required."
+  [^Integer startingPop]
+  (-> default-sector
+      (add-new-citizen startingPop)
       )
   )

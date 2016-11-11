@@ -34,6 +34,9 @@
                      #(= 3 (count %))))
 (s/def ::cloneNum (s/and integer?
                          pos?))
+(s/def ::treason (s/and integer?
+                        (complement neg?)))
+(s/def ::commendations ::treason)
 ;; Citizen IDs start at 1
 (s/def ::citizenId (s/and integer?
                           pos?))
@@ -41,7 +44,7 @@
 (s/def ::dead? boolean?)
 (s/def ::gender #(#{:male :female} %))
 ;; Players may not yet have information on associates
-(s/def ::citizenMap (s/keys :req-un [::citizenId ::clearance ::fName ::zone ::cloneNum ::gender]
+(s/def ::citizenMap (s/keys :req-un [::citizenId ::clearance ::fName ::zone ::cloneNum ::gender ::commendations ::treason]
                             :opt-un [::associates ::dead?]))
 (s/def ::citizens (s/map-of ::citizenId ::citizenMap))
 (s/def ::sector (s/keys :req-un [::zone ::citizens]))
