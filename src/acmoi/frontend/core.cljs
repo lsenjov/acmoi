@@ -19,18 +19,19 @@
                   }
                  )
   )
-(def userInfo (atom {:userCitizen 1 :userKey "tempApiKey"}))
+;(def userInfo (atom {:userCitizen 1 :userKey "tempApiKey"}))
+(def userInfo (atom nil))
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
-  {:IR {:color "White" :background-color "Black"}
-   :R {:color "White" :background-color "DarkRed"}
-   :O {:color "White" :background-color "#DF7C00"}
-   :Y {:color "White" :background-color "GoldenRod"}
-   :G {:color "White" :background-color "Green"}
-   :B {:color "White" :background-color "MediumBlue"}
-   :I {:color "White" :background-color "Indigo"}
-   :V {:color "White" :background-color "DarkViolet"}
+  {:IR {}
+   :R {:background-color "DarkRed"}
+   :O {:background-color "#DF7C00"}
+   :Y {:background-color "GoldenRod"}
+   :G {:background-color "Green"}
+   :B {:background-color "MediumBlue"}
+   :I {:background-color "Indigo"}
+   :V {:background-color "DarkViolet"}
    :U {:color "Black" :background-color "White"}
    }
   )
@@ -92,7 +93,7 @@
                           (#(if @expand
                               (merge % {:border "1px solid white"})
                               %))
-                          (merge (get colour-styles (keyword (:clearance cmap)) {:color "Red" :background-color "Black"}))
+                          (merge (get colour-styles (keyword (:clearance cmap)) {:color "Red"}))
                           )
                :onClick #(if (not (:citizenId cmap)) (get-citizen-basic n) nil)
                }
@@ -128,11 +129,18 @@
       )
     )
   )
-(defn hello-world []
+(defn main-page []
   (let [expand (atom false)]
     (fn []
       [:div
        [:table
+        [:tr
+         [:td {:colSpan 3
+               :border "1px dotted White"
+               }
+          "Testing"
+          ]
+         ]
         [:tr
          ;; Left column. Top part: objectives. Bottom part: citizen information
          [:td {:style {:border "1px dotted White"}}
@@ -145,11 +153,11 @@
           ]
          ;; Middle column, surveillance information
          [:td {:style {:border "1px dotted White"
-                       :color "White"}}
+                       }}
           ]
          ;; Right column, forms
          [:td {:style {:border "1px dotted White"
-                       :color "White"}}
+                       }}
           ]
          ]
         ]
@@ -157,8 +165,31 @@
       )
     )
   )
+(defn login-page
+  "User login form"
+  []
+  (fn []
+    [:div
+     "Testing Login Form"
+     [:span {:onClick #(reset! userInfo {:userCitizen 1 :userKey "tempApiKey"})}
+      "##LOG IN##"
+      ]
+     ]
+    )
+  )
+(defn front
+  "Render whether it needs the login form or the main page"
+  []
+  (fn []
+    (if (:userKey @userInfo)
+      [main-page]
+      [login-page]
+      )
+    )
+  )
 
-(reagent/render-component [hello-world]
+
+(reagent/render-component [front]
                           (. js/document (getElementById "app")))
 
 (defn on-js-reload []
