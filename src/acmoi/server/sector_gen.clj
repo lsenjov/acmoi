@@ -97,7 +97,12 @@
   (->> sector
        :citizens
        ;; Keep all citizens of the specified clearance
-       (filter (fn [[k {clear :clearance}]] (= clearance clear)))
+       (filter (fn [[k {clear :clearance dead? :dead?}]]
+                 (and (= clearance clear)
+                      (not dead?)
+                      )
+                 )
+               )
        (apply merge {})
        )
   )
@@ -186,6 +191,11 @@
   [^Integer startingPop]
   (-> default-sector
       (add-new-citizen startingPop)
+      (clearance-level-sector)
+      (clearance-level-sector)
+      (clearance-level-sector)
+      (clearance-level-sector)
+      (clearance-level-sector)
       (clearance-level-sector)
       )
   )

@@ -15,7 +15,7 @@
 ;; TODO change back to defonce when required
 (def app-state (atom
                  {:citizens {}
-                  :poi (range 1 30)
+                  :poi (repeatedly 30 #(inc (rand-int 1000)))
                   }
                  )
   )
@@ -25,7 +25,7 @@
   "Maps clearances to foreground and background colours"
   {:IR {:color "White" :background-color "Black"}
    :R {:color "White" :background-color "DarkRed"}
-   :O {:color "White" :background-color "DarkOrange"}
+   :O {:color "White" :background-color "#DF7C00"}
    :Y {:color "White" :background-color "GoldenRod"}
    :G {:color "White" :background-color "Green"}
    :B {:color "White" :background-color "MediumBlue"}
@@ -75,7 +75,7 @@
          zone "-"
          cloneNum
          )
-    "Unknown"
+    "Loading"
     )
   )
 
