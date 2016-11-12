@@ -19,6 +19,11 @@
    :U {:income 10000000}
    }
   )
+(def clearanceOrder
+  "A map of clearances to level (0 is :IR), and level to clearances.
+  Easy to convert between the two and find promotional levels"
+  (let [m {:IR 0 :R 1 :O 2 :Y 3 :G 4 :B 5 :I 6 :V 7 :U 8}]
+    (apply merge m (map (fn [[k v]] {v k}) m))))
 (s/def ::clearance
   (s/and keyword?
          #((-> clearances keys set) %)

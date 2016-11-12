@@ -42,7 +42,8 @@
        )
   )
 
-(defonce ^:private sector
+;(defonce ^:private sector
+(def ^:private sector
   (if-let [z (sector-load)]
     (agent z)
     (agent (ssg/generate-sector 1000))

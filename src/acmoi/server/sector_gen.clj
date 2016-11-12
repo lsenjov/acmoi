@@ -38,7 +38,7 @@
       :commendations 0
       :treason 0
       ;; TODO Remove, this is just for debugging
-      :associates (vec (repeatedly (rand-int 20) #(rand-int 1000)))
+      :associates (vec (repeatedly (rand-int 20) #(inc (rand-int 1000))))
       }
      }
     )
@@ -67,10 +67,77 @@
    (add-new-citizen sector 1))
   )
 
+(defn- modify-clearance
+  "Takes a clearance, adjusts it up by the given number.
+  If the number is negative, demotes"
+  ([clearance ^Integer n]
+   {:pre [(s/assert ::ss/clearance clearance)]
+    :post [(s/assert ::ss/clearance %)]}
+   (->> clearance
+        ;; Convert to integer value
+        (get ss/clearanceOrder)
+        ;; Add the modifier
+        (+ n)
+        ;; Lowest is IR at 0
+        (max 0)
+        ;; Max is U at 8
+        (min 8)
+        ;; Get the keyword again
+        (get ss/clearanceOrder)
+        )
+   )
+  )
+
+
+(defn- promote-citizen
+  "Promotes a citizen one level, adds a bonus to their account"
+  ([{:keys [] :as sector} citizenId]
+   {:pre [(s/assert ::ss/sector sector)]
+    :post [(s/assert ::ss/sector %)]}
+   (log/trace "promote-citizen" citizenId)
+   (if-let [c (get-in sector [:citizens citizenId])]
+     (-> sector
+         (update-in [:citizens citizenId :clearance] modify-clearance 1)
+         ;; TODO Add bonus
+         )
+     (do
+       (log/info "Citizen" citizenId "does not exist")
+       sector
+       )
+     )
+   )
+  )
+
+(defn- promote-citizens
+  "Given a sector and clearance, promotes a specified number of citizens of the clearance one higher"
+  [sector clearance ^Integer n]
+  {:pre [(s/assert ::ss/sector sector)
+         (s/assert ::ss/clearance clearance)
+         (s/assert pos? n)]
+   :post [(s/assert ::ss/sector sector)]}
+  (->> sector
+       :citizens
+       ;; Keep all citizens of the specified clearance
+       (filter (fn [[k {clear :clearance}]] (= clearance clear)))
+       ;; Most commendable citizens first TODO check order
+       (sort-by :commendations)
+       ;; Get the number required
+       (take n)
+       ;; Now create the required functions
+       (map (fn [[cid _]] (fn [sec] (promote-citizen sec cid))))
+       ;; Put it all together
+       (apply comp)
+       ;; Now apply it to the sector
+       (#(% sector))
+       )
+  )
+
 (defn generate-sector
   "Generates a random sector, promotes those required."
   [^Integer startingPop]
   (-> default-sector
       (add-new-citizen startingPop)
+      (promote-citizens :IR 100)
       )
   )
+

@@ -3,6 +3,7 @@
             [reagent.core :as reagent :refer [atom]]
             [ajax.core :refer [GET POST] :as ajax]
             [cljs.js :as cjs]
+            [acmoi.shared.spec :as ss]
             ))
 
 (enable-console-print!)
@@ -14,6 +15,7 @@
 ;; TODO change back to defonce when required
 (def app-state (atom
                  {:citizens {}
+                  :poi [1 2 3 4 5 6 7 8]
                   }
                  )
   )
@@ -40,7 +42,6 @@
         }
        )
   )
-
 (defn- get-citizen-associates
   "Gets the associates of a citizen"
   [citizenId]
@@ -76,6 +77,10 @@
   (let [expand (atom false)]
     (fn []
       (let [cmap (get-in @app-state [:citizens n])]
+        (if (not (:citizenId cmap))
+            (get-citizen-basic n)
+            nil
+            )
         [:div {:style (-> {:margin "2px"}
                           (#(if @expand
                               (merge % {:border "1px solid white"})
@@ -120,18 +125,26 @@
   (let [expand (atom false)]
     (fn []
       [:div
-       [:div (doall (for
-                      ;;[n (-> @app-state :citizens keys)]
-                      [n (range 1 6)]
-                      ^{:key n}
-                      [create-citizen-box n]
-                                     ))]
-       [:div {:style {:color "White"}}
-        ]
-       [:div {:style {:color "White"}}
-        (-> (assoc (ajax/json-response-format) :keywords? true)
-            pr-str
-            )
+       [:table
+        [:tr
+         ;; Left column. Top part: objectives. Bottom part: citizen information
+         [:td {:style {:border "1px dotted White"}}
+          ;; Creates a citizen box for each person of information
+          [:div (doall (for
+                         [n (-> @app-state :poi)]
+                         ^{:key n}
+                         [create-citizen-box n]
+                         ))]
+          ]
+         ;; Middle column, surveillance information
+         [:td {:style {:border "1px dotted White"
+                       :color "White"}}
+          ]
+         ;; Right column, forms
+         [:td {:style {:border "1px dotted White"
+                       :color "White"}}
+          ]
+         ]
         ]
        ]
       )
