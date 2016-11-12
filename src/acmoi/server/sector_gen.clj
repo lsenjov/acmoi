@@ -88,6 +88,19 @@
    )
   )
 
+(defn- get-citizens-by-clearance
+  "Gets all citizens of a certain clearance"
+  [sector clearance]
+  {:pre [(s/assert ::ss/sector sector)
+         (s/assert ::ss/clearance clearance)]
+   :post [(s/assert ::ss/citizens %)]}
+  (->> sector
+       :citizens
+       ;; Keep all citizens of the specified clearance
+       (filter (fn [[k {clear :clearance}]] (= clearance clear)))
+       (apply merge {})
+       )
+  )
 
 (defn- promote-citizen
   "Promotes a citizen one level, adds a bonus to their account"
@@ -119,15 +132,51 @@
        :citizens
        ;; Keep all citizens of the specified clearance
        (filter (fn [[k {clear :clearance}]] (= clearance clear)))
+       ;; Just keep the maps
+       (map val)
        ;; Most commendable citizens first TODO check order
        (sort-by :commendations)
+       (sort-by :citizenId)
        ;; Get the number required
        (take n)
        ;; Now create the required functions
-       (map (fn [[cid _]] (fn [sec] (promote-citizen sec cid))))
+       (map (fn [{cid :citizenId}] (fn [sec] (promote-citizen sec cid))))
        ;; Put it all together
        (apply comp)
        ;; Now apply it to the sector
+       (#(% sector))
+       )
+  )
+(defn- check-and-promote-clearance
+  "Checks the clearance. If there's not enough citizens, promotes the required number from the previous clearance"
+  [sector clearance]
+  {:pre [(s/assert ::ss/sector sector)
+         (s/assert ::ss/clearance clearance)]
+   :post [(s/assert ::ss/sector %)]}
+  (log/trace "check-and-promote-clearance" clearance)
+  (log/trace "oneIn:" (get-in ss/clearances [clearance :oneIn]))
+  (let [population (count (:citizens sector))
+        required (quot population
+                       (get-in ss/clearances [clearance :oneIn]))
+        clearPop (count (get-citizens-by-clearance sector clearance))]
+    (if (< clearPop required)
+      (promote-citizens sector (modify-clearance clearance -1) (- required clearPop))
+      sector
+      )
+    )
+  )
+
+(defn- clearance-level-sector
+  "Check each clearance to make sure there's enough citizens (from the bottom up).
+  If there's not enough, promote. The does mean a single citizen may jump multiple ranks at once"
+  [sector]
+  {:pre [(s/assert ::ss/sector sector)]
+   :post [(s/assert ::ss/sector %)]}
+  (log/trace "clearance-level-sector")
+  (->> [:R :O :Y :G :B :I :V :U]
+       (reverse)
+       (map (fn [c] (fn [sec] (check-and-promote-clearance sec c))))
+       (apply comp)
        (#(% sector))
        )
   )
@@ -137,7 +186,7 @@
   [^Integer startingPop]
   (-> default-sector
       (add-new-citizen startingPop)
-      (promote-citizens :IR 100)
+      (clearance-level-sector)
       )
   )
 

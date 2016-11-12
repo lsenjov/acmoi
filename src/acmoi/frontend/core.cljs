@@ -15,7 +15,7 @@
 ;; TODO change back to defonce when required
 (def app-state (atom
                  {:citizens {}
-                  :poi [1 2 3 4 5 6 7 8]
+                  :poi (range 1 30)
                   }
                  )
   )
@@ -25,6 +25,13 @@
   "Maps clearances to foreground and background colours"
   {:IR {:color "White" :background-color "Black"}
    :R {:color "White" :background-color "DarkRed"}
+   :O {:color "White" :background-color "DarkOrange"}
+   :Y {:color "White" :background-color "GoldenRod"}
+   :G {:color "White" :background-color "Green"}
+   :B {:color "White" :background-color "MediumBlue"}
+   :I {:color "White" :background-color "Indigo"}
+   :V {:color "White" :background-color "DarkViolet"}
+   :U {:color "Black" :background-color "White"}
    }
   )
 
