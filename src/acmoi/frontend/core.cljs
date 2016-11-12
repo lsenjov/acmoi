@@ -24,7 +24,7 @@
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
-  {:IR {}
+  {:IR {:background-color "Black"}
    :R {:background-color "DarkRed"}
    :O {:background-color "#DF7C00"}
    :Y {:background-color "GoldenRod"}
@@ -129,7 +129,9 @@
       )
     )
   )
-(defn main-page []
+(defn main-page
+  []
+  (get-citizen-basic (:citizenId @userInfo))
   (let [expand (atom false)]
     (fn []
       [:div
@@ -138,7 +140,7 @@
          [:td {:colSpan 3
                :border "1px dotted White"
                }
-          "Testing"
+          "Welcome Citizen " (print-person-name (get-in @app-state [:citizens (:citizenId @userInfo)]))
           ]
          ]
         [:tr
@@ -168,20 +170,56 @@
 (defn login-page
   "User login form"
   []
-  (fn []
-    [:div
-     "Testing Login Form"
-     [:span {:onClick #(reset! userInfo {:userCitizen 1 :userKey "tempApiKey"})}
-      "##LOG IN##"
-      ]
-     ]
+  (let [uVal (atom nil)
+        value (atom "")]
+    (fn []
+      [:div {:style {:color "White"}}
+       (if-let [k (:userKey @userInfo)]
+         ;; Has api key, no citizen id
+         (do
+           (GET "/api/player/login/"
+                {:params {:userKey k}
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :handler (fn [m]
+                            (swap! userInfo merge m)
+                            (log/info "userInfo is now:" @userInfo)
+                            )
+                 }
+                )
+           "Logging in, please wait..."
+           )
+         ;; No api key
+         [:div
+           "Please enter login key:" [:br]
+           [:input {:type "text" :value @value :on-change #(reset! value (-> % .-target .-value))}] [:br]
+           [:span {:onClick #(swap! userInfo assoc :userKey @value)} "##LOG IN##"]
+          ]
+         )
+       (if (not @uVal)
+         ;; We have not requested a new account
+         [:div>span {:onClick #(GET "/api/player/new/"
+                                    :response-format (ajax/json-response-format {:keywords? true})
+                                    :handler (fn [m]
+                                               (reset! uVal (:userKey m))
+                                               (log/info "uVal is now:" m))
+                                    )
+                     }
+          "##NEW USER##"
+          ]
+         ;; We have requested a new account
+         [:div>span "Your new login key: " @uVal [:br]
+          "Make sure to save this!"
+          ]
+         )
+       ]
+      )
     )
   )
 (defn front
   "Render whether it needs the login form or the main page"
   []
   (fn []
-    (if (:userKey @userInfo)
+    (if (:citizenId @userInfo)
       [main-page]
       [login-page]
       )

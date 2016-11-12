@@ -3,6 +3,7 @@
             [clojure.spec :as s]
 
             [acmoi.shared.spec :as ss]
+            [acmoi.shared.helpers :as helpers]
             )
   )
 
@@ -11,7 +12,9 @@
   {:zone "ABC"
    ;; The next id to use
    :citizenId 1
-   :citizens {}}
+   :citizens {}
+   :players {}
+   }
   )
 
 (defn- generate-first-name
@@ -30,7 +33,8 @@
   (let [gender (rand-nth [:male :female])]
     {citizenId
      {:gender gender
-      :fName (generate-first-name gender)
+      ;:fName (generate-first-name gender)
+      :fName (str "Cit" citizenId)
       :clearance :IR
       :zone zone
       :citizenId citizenId
@@ -86,25 +90,6 @@
         (get ss/clearanceOrder)
         )
    )
-  )
-
-(defn- get-citizens-by-clearance
-  "Gets all citizens of a certain clearance"
-  [sector clearance]
-  {:pre [(s/assert ::ss/sector sector)
-         (s/assert ::ss/clearance clearance)]
-   :post [(s/assert ::ss/citizens %)]}
-  (->> sector
-       :citizens
-       ;; Keep all citizens of the specified clearance
-       (filter (fn [[k {clear :clearance dead? :dead?}]]
-                 (and (= clearance clear)
-                      (not dead?)
-                      )
-                 )
-               )
-       (apply merge {})
-       )
   )
 
 (defn- promote-citizen
@@ -163,7 +148,7 @@
   (let [population (count (:citizens sector))
         required (quot population
                        (get-in ss/clearances [clearance :oneIn]))
-        clearPop (count (get-citizens-by-clearance sector clearance))]
+        clearPop (count (helpers/get-citizens-by-clearance sector clearance))]
     (if (< clearPop required)
       (promote-citizens sector (modify-clearance clearance -1) (- required clearPop))
       sector

@@ -15,6 +15,15 @@
 (log/trace "Logging initialised at trace level")
 
 (defroutes app-routes
+  ;; Player commands
+  (GET "/api/player/login/"
+       {{:keys [userKey] :as params} :params baseURL :context}
+       (json/write-str (acg/log-in userKey)))
+  ;; Returns the player map, or an empty map if it doesn't exist
+  (GET "/api/player/new/"
+       {baseURL :context}
+       (json/write-str (acg/new-player)))
+
   ;; Getting citizen details
   ;; Basic details
   (GET "/api/citizen/basic/:userKey/:citizenId/" {{:keys [userKey citizenId] :as params} :params baseURL :context} (json/write-str (acg/get-citizen-basic userKey citizenId)))

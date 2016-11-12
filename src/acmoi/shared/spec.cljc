@@ -48,6 +48,12 @@
 (s/def ::associates (s/coll-of ::citizenId))
 (s/def ::dead? boolean?)
 (s/def ::gender #(#{:male :female} %))
+
+;; Player information
+(s/def ::userKey (s/and string?
+                        #(pos? (count %))))
+(s/def ::player (s/keys :req-un [::userKey ::citizenId]))
+(s/def ::players (s/map-of ::userKey ::player))
 ;; Players may not yet have information on associates
 (s/def ::citizenMap (s/keys :req-un [::citizenId ::clearance ::fName ::zone ::cloneNum ::gender ::commendations ::treason]
                             :opt-un [::associates ::dead?]))
