@@ -2,7 +2,6 @@
   (:require [taoensso.timbre :as log]
             [reagent.core :as reagent :refer [atom]]
             [ajax.core :refer [GET POST] :as ajax]
-            [cljs.js :as cjs]
             [acmoi.shared.spec :as ss]
             ))
 
