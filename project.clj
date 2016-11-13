@@ -62,7 +62,7 @@
                ;; production. You can build this with:
                ;; lein cljsbuild once min
                {:id "min"
-                :source-paths ["src"]
+                :source-paths ["src/acmoi/frontend" "src/acmoi/shared"]
                 :compiler {:output-to "resources/public/js/compiled/acmoi.js"
                            :main acmoi.frontend.core
                            :optimizations :advanced
