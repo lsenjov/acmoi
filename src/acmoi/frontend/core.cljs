@@ -21,6 +21,21 @@
   )
 ;(def userInfo (atom {:userCitizen 1 :userKey "tempApiKey"}))
 (def userInfo (atom nil))
+(def systemInfo (atom {:context (-> js/window
+                                    .-location
+                                    ;; This gets /context/index.html
+                                    .-pathname
+                                    ;; Remove the ending
+                                    (clojure.string/replace "/index.html" "")
+                                    )
+                       }
+                      )
+  )
+(defn- wrap-context
+  "Adds the current context to a url"
+  [url]
+  (str (:context @systemInfo) url)
+  )
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
@@ -39,7 +54,7 @@
 (defn- get-citizen-basic
   "Gets basic citizen info"
   [citizenId]
-  (GET "/api/citizen/basic/"
+  (GET (wrap-context "/api/citizen/basic/")
        {:params {:citizenId citizenId
                  :userKey (:userKey @userInfo)}
         :response-format (ajax/json-response-format {:keywords? true})
@@ -53,7 +68,7 @@
 (defn- get-citizen-associates
   "Gets the associates of a citizen"
   [citizenId]
-  (GET "/api/citizen/associates/"
+  (GET (wrap-context "/api/citizen/associates/")
        {:params {:citizenId citizenId
                  :userKey (:userKey @userInfo)}
         :response-format (ajax/json-response-format {:keywords? true})
@@ -177,7 +192,7 @@
        (if-let [k (:userKey @userInfo)]
          ;; Has api key, no citizen id
          (do
-           (GET "/api/player/login/"
+           (GET (wrap-context "/api/player/login/")
                 {:params {:userKey k}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :handler (fn [m]
@@ -197,7 +212,7 @@
          )
        (if (not @uVal)
          ;; We have not requested a new account
-         [:div>span {:onClick #(GET "/api/player/new/"
+         [:div>span {:onClick #(GET (wrap-context "/api/player/new/")
                                     :response-format (ajax/json-response-format {:keywords? true})
                                     :handler (fn [m]
                                                (reset! uVal (:userKey m))
