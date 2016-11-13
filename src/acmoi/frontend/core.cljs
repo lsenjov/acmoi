@@ -13,23 +13,23 @@
 ;; define your app data so that it doesn't get over-written on reload
 
 ;; TODO change back to defonce when required
-(def app-state (atom
+(defonce app-state (atom
                  {:citizens {}
-                  :poi (repeatedly 30 #(inc (rand-int 1000)))
+                  :poi (repeatedly 5 #(inc (rand-int 1000)))
                   }
                  )
   )
-;(def userInfo (atom {:userCitizen 1 :userKey "tempApiKey"}))
-(def userInfo (atom nil))
-(def systemInfo (atom {:context (-> js/window
-                                    .-location
-                                    ;; This gets /context/index.html
-                                    .-pathname
-                                    ;; Remove the ending
-                                    (clojure.string/replace "/index.html" "")
-                                    )
-                       }
+(defonce userInfo (atom nil))
+(defonce systemInfo
+  (atom {:context (-> js/window
+                      .-location
+                      ;; This gets /context/index.html
+                      .-pathname
+                      ;; Remove the ending
+                      (clojure.string/replace "/index.html" "")
                       )
+         }
+        )
   )
 (defn- wrap-context
   "Adds the current context to a url"
@@ -39,14 +39,14 @@
 
 (def ^:private colour-styles
   "Maps clearances to foreground and background colours"
-  {:IR {:background-color "Black"}
-   :R {:background-color "DarkRed"}
-   :O {:background-color "#DF7C00"}
-   :Y {:background-color "GoldenRod"}
-   :G {:background-color "Green"}
-   :B {:background-color "MediumBlue"}
-   :I {:background-color "Indigo"}
-   :V {:background-color "DarkViolet"}
+  {:IR {:color "White" :background-color "Black"}
+   :R {:color "White" :background-color "DarkRed"}
+   :O {:color "White" :background-color "#DF7C00"}
+   :Y {:color "White" :background-color "GoldenRod"}
+   :G {:color "White" :background-color "Green"}
+   :B {:color "White" :background-color "MediumBlue"}
+   :I {:color "White" :background-color "Indigo"}
+   :V {:color "White" :background-color "DarkViolet"}
    :U {:color "Black" :background-color "White"}
    }
   )
@@ -104,9 +104,10 @@
             (get-citizen-basic n)
             nil
             )
-        [:div {:style (-> {:margin "2px"}
+        [:span {:class "btn btn-default"
+               :style (-> {:margin "2px"}
                           (#(if @expand
-                              (merge % {:border "1px solid white"})
+                              ;(merge % {:border "1px solid white"})
                               %))
                           (merge (get colour-styles (keyword (:clearance cmap)) {:color "Red"}))
                           )
@@ -114,7 +115,8 @@
                }
          (if @expand
            [:span
-            [:span {:onClick #(do (js/console.log (str "Clicked on person:" n))
+            [:span {:class "btn btn-default btn-xs"
+                    :onClick #(do (js/console.log (str "Clicked on person:" n))
                                   (swap! expand not)
                                   false)
                     }
@@ -122,18 +124,21 @@
             "Id Number:" n [:br]
             (if (:associates cmap)
               ;; Associates known
-              [:span "Known associates:" [:br]
+              [:div {:class "btn-group-vertical"}
+               "Known associates:" [:br]
                (for [p (:associates cmap)]
                  [create-citizen-box p])
                ]
               ;; Associates unknown
-              [:span {:onClick #(get-citizen-associates n)}
+              [:span {:class "btn btn-default btn-xs"
+                      :onClick #(get-citizen-associates n)}
                "##Get Associates##"
                ]
               )
 
               ]
-           [:span {:onClick #(do (js/console.log (str "Clicked on person:" n))
+           [:span {:class "btn btn-default btn-xs"
+                   :onClick #(do (js/console.log (str "Clicked on person:" n))
                                  (swap! expand not)
                                  false)
                    }
@@ -150,31 +155,40 @@
   (let [expand (atom false)]
     (fn []
       [:div
-       [:table
-        [:tr
-         [:td {:colSpan 3
-               :border "1px dotted White"
-               }
-          "Welcome Citizen " (print-person-name (get-in @app-state [:citizens (:citizenId @userInfo)]))
+       [:table {:class "table table-striped table-hover"}
+        [:thead
+         [:tr
+          [:th {:colSpan 3
+                }
+           "Welcome Citizen " [create-citizen-box (:citizenId @userInfo)]
+           ]
           ]
          ]
         [:tr
          ;; Left column. Top part: objectives. Bottom part: citizen information
-         [:td {:style {:border "1px dotted White"}}
-          ;; Creates a citizen box for each person of information
-          [:div (doall (for
-                         [n (-> @app-state :poi)]
-                         ^{:key n}
-                         [create-citizen-box n]
-                         ))]
+         [:td
+          [:h4
+           "Persons of Interest:"
+           ]
+          [:div {:class "btn-group-vertical"}
+           ;; Creates a citizen box for each person of information
+           (doall (for
+                    [n (-> @app-state :poi)]
+                    ^{:key n}
+                    [create-citizen-box n]
+                    ))]
           ]
-         ;; Middle column, surveillance information
-         [:td {:style {:border "1px dotted White"
-                       }}
+         ;; Middle left column, surveillance information
+         [:td
+          "Surveillance information"
+          ]
+         ;; Middle right column, objectives
+         [:td
+          "Objectives go here"
           ]
          ;; Right column, forms
-         [:td {:style {:border "1px dotted White"
-                       }}
+         [:td
+          "Forms go here"
           ]
          ]
         ]
@@ -188,7 +202,7 @@
   (let [uVal (atom nil)
         value (atom "")]
     (fn []
-      [:div {:style {:color "White"}}
+      [:div
        (if-let [k (:userKey @userInfo)]
          ;; Has api key, no citizen id
          (do
@@ -207,19 +221,23 @@
          [:div
            "Please enter login key:" [:br]
            [:input {:type "text" :value @value :on-change #(reset! value (-> % .-target .-value))}] [:br]
-           [:span {:onClick #(swap! userInfo assoc :userKey @value)} "##LOG IN##"]
+           [:span {:class "btn btn-default btn-sm"
+                   :onClick #(swap! userInfo assoc :userKey @value)}
+            "LOG IN"
+            ]
           ]
          )
        (if (not @uVal)
          ;; We have not requested a new account
-         [:div>span {:onClick #(GET (wrap-context "/api/player/new/")
+         [:div>span {:class "btn btn-default btn-sm"
+                     :onClick #(GET (wrap-context "/api/player/new/")
                                     :response-format (ajax/json-response-format {:keywords? true})
                                     :handler (fn [m]
                                                (reset! uVal (:userKey m))
                                                (log/info "uVal is now:" m))
                                     )
                      }
-          "##NEW USER##"
+          "NEW USER"
           ]
          ;; We have requested a new account
          [:div>span "Your new login key: " @uVal [:br]
