@@ -5,6 +5,11 @@
             )
   )
 
+(defn uuid
+  "Generates a random uuid"
+  []
+  (str (java.util.UUID/randomUUID)))
+
 (defn parse-int
   "Parses a string to an integer, or nil if fail"
   [^String n]
@@ -17,6 +22,25 @@
           )
      :cljs n
      )
+  )
+
+(defn get-citizens-by-clearance
+  "Gets all citizens of a certain clearance"
+  [sector clearance]
+  {:pre [(s/assert ::ss/sector sector)
+         (s/assert ::ss/clearance clearance)]
+   :post [(s/assert ::ss/citizens %)]}
+  (->> sector
+       :citizens
+       ;; Keep all citizens of the specified clearance
+       (filter (fn [[k {clear :clearance dead? :dead?}]]
+                 (and (= clearance clear)
+                      (not dead?)
+                      )
+                 )
+               )
+       (apply merge {})
+       )
   )
 
 (defn filter-keys
