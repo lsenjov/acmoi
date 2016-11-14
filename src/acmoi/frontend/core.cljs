@@ -27,6 +27,7 @@
                       ;; Remove the ending
                       (clojure.string/replace "/index.html" "")
                       )
+         :buttonSize " btn-xs "
          }
         )
   )
@@ -77,6 +78,34 @@
         }
        )
   )
+(defn- add-person-of-interest
+  "Adds a poi to app-state. Returns nil on fail"
+  [citizenId]
+  (log/info "Adding person of interest:" citizenId)
+  (let [cid (js/parseInt citizenId)]
+    (if (> cid 0)
+      (swap! app-state
+             update-in [:poi]
+             (comp sort
+                   distinct
+                   #(conj % cid)
+                   )
+             )
+      nil
+      )
+    )
+  )
+(defn- remove-person-of-interest
+  "Removes a poi in app-state. Returns new app state"
+  [citizenId]
+  (log/info "Removing person of interest:" citizenId)
+  (let [cid (js/parseInt citizenId)]
+    (swap! app-state
+           update-in [:poi]
+           #(remove (set [cid]) %)
+           )
+    )
+  )
 
 (defn- print-person-name
   "Prints a citizen's name from a map"
@@ -113,14 +142,31 @@
                :onClick #(if (not (:citizenId cmap)) (get-citizen-basic n) nil)
                }
          (if @expand
+           ;; Expanded Citizen Info
            [:span
-            [:span {:class "btn btn-default btn-xs"
+            [:span {:class (str "btn btn-default " (:buttonSize @systemInfo))
                     :onClick #(do (js/console.log (str "Clicked on person:" n))
                                   (swap! expand not)
                                   false)
                     }
              "Name: " (print-person-name cmap)] [:br]
-            "Id Number:" n [:br]
+            [:div {:class "btn-group"}
+             (if (not (some #{n} (:poi @app-state)))
+               [:span {:class (str "btn btn-success " (:buttonSize @systemInfo))
+                       :onClick #(add-person-of-interest n)
+                       }
+                "Add poi"
+                ]
+               [:span {:class (str "btn btn-warning " (:buttonSize @systemInfo))
+                       :onClick #(remove-person-of-interest n)
+                       }
+                "Remove"
+                ]
+               )
+            ]
+            [:div
+             "Id Number:" n [:br]
+             ]
             (if (:associates cmap)
               ;; Associates known
               [:div {:class "btn-group-vertical"}
@@ -129,14 +175,15 @@
                  [create-citizen-box p])
                ]
               ;; Associates unknown
-              [:span {:class "btn btn-default btn-xs"
+              [:span {:class (str "btn btn-default " (:buttonSize @systemInfo))
                       :onClick #(get-citizen-associates n)}
-               "##Get Associates##"
+               "Get Associates"
                ]
               )
 
-              ]
-           [:span {:class "btn btn-default btn-xs"
+            ]
+           ;; Collapsed citizen info
+           [:span {:class (str "btn btn-default " (:buttonSize @systemInfo))
                    :onClick #(do (js/console.log (str "Clicked on person:" n))
                                  (swap! expand not)
                                  false)
@@ -151,23 +198,50 @@
 (defn main-page
   []
   (get-citizen-basic (:citizenId @userInfo))
-  (let [expand (atom false)]
+  (let [expand (atom false)
+        newPersonVal (atom "")
+        ]
     (fn []
       [:div
        [:table {:class "table table-striped table-hover"}
         [:thead
          [:tr
-          [:th {:colSpan 3
-                }
-           "Welcome Citizen " [create-citizen-box (:citizenId @userInfo)]
+          [:th {:colSpan 3}
+           ;; Header Row
+           [:span {:class "panel panel-default"} "Welcome Citizen " [create-citizen-box (:citizenId @userInfo)]]
+           ;; Select button sizes
+           [:span {:class "panel panel-default"}
+            [:span "Button Size"]
+            [:span {:class (str "btn btn-default" (:buttonSize @systemInfo)) :onClick #(swap! systemInfo assoc-in [:buttonSize] " btn-xs ")} "Extra Small"]
+            [:span {:class (str "btn btn-default" (:buttonSize @systemInfo)) :onClick #(swap! systemInfo assoc-in [:buttonSize] " btn-sm ")} "Small"]
+            [:span {:class (str "btn btn-default" (:buttonSize @systemInfo)) :onClick #(swap! systemInfo assoc-in [:buttonSize] " ")} "Medium"]
+            ]
            ]
           ]
          ]
         [:tr
-         ;; Left column. Top part: objectives. Bottom part: citizen information
+         ;; Left column. Citizen information
          [:td
           [:h4
            "Persons of Interest:"
+           ]
+          ;; Adding new persons of interest
+          [:div
+           [:input {:type "text"
+                    :class "form-control"
+                    :value @newPersonVal
+                    :on-change #(reset! newPersonVal (-> % .-target .-value))
+                    :length 8
+                    }
+            ]
+           [:span {:class (str "btn btn-default " (:buttonSize @systemInfo))
+                  :onClick #(do
+                              (add-person-of-interest @newPersonVal)
+                              (reset! newPersonVal "")
+                              )
+                  }
+            "Add person of interest"
+            ]
            ]
           [:div {:class "btn-group-vertical"}
            ;; Creates a citizen box for each person of information
@@ -218,12 +292,12 @@
            )
          ;; No api key
          [:div
-           "Please enter login key:" [:br]
-           [:input {:type "text" :value @value :on-change #(reset! value (-> % .-target .-value))}] [:br]
-           [:span {:class "btn btn-default btn-sm"
-                   :onClick #(swap! userInfo assoc :userKey @value)}
-            "LOG IN"
-            ]
+          "Please enter login key:" [:br]
+          [:input {:type "text" :value @value :on-change #(reset! value (-> % .-target .-value))}] [:br]
+          [:span {:class "btn btn-default btn-sm"
+                  :onClick #(swap! userInfo assoc :userKey @value)}
+           "LOG IN"
+           ]
           ]
          )
        (if (not @uVal)
