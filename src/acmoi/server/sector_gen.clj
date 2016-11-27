@@ -14,6 +14,7 @@
    :citizenId 1
    :citizens {}
    :players {}
+   :goods {}
    }
   )
 
@@ -171,17 +172,26 @@
        )
   )
 
+(defn tick-day
+  "Moves a sector on by one day"
+  [sector]
+  {:pre [(s/assert ::ss/sector sector)]
+   :post [(s/assert ::ss/sector %)]}
+  (log/trace "tick-day")
+  (-> sector
+      clearance-level-sector
+      )
+  )
+
 (defn generate-sector
   "Generates a random sector, promotes those required."
   [^Integer startingPop]
   (-> default-sector
       (add-new-citizen startingPop)
-      (clearance-level-sector)
-      (clearance-level-sector)
-      (clearance-level-sector)
-      (clearance-level-sector)
-      (clearance-level-sector)
-      (clearance-level-sector)
+      (tick-day)
+      (tick-day)
+      (tick-day)
+      (tick-day)
+      (tick-day)
       )
   )
-
