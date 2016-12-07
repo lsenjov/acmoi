@@ -6,6 +6,16 @@
             )
   )
 
+(defmacro valid?
+  "The equivalent of s/valid?, except isn't compiled if *compile-asserts* or check-asserts are false
+  If these are off, will always return true"
+  [spec x]
+  (if s/*compile-asserts*
+    `(if clojure.lang.RT/checkSpecAsserts
+       (s/valid? ~spec ~x)
+       true)
+    true))
+
 (defn uuid
   "Generates a random uuid"
   []
@@ -48,33 +58,3 @@
   "Takes a map, keeps only the keys specified"
   [m ks]
   (apply merge {} (filter (fn [[k v]] ((set ks) k)) m)))
-
-(defn get-price
-  "Gets the price of a good"
-  [{goods :goods :as sector} clearance goodType]
-  {:pre [(s/assert ::ss/sector sector)
-         (s/assert ::ss/goodType goodType)
-         (s/assert ::ss/clearance clearance)]
-   :post [(s/assert ::ss/price %)]}
-  (log/trace "get-price of" clearance goodType)
-  (if-let [p (get-in goods [goodType clearance :price])]
-    p
-    ss/defaultGoodPrice
-    )
-  )
-(defn calculate-profitability
-  "Calculates how profitable daily production of a good is at current market prices"
-  [{goods :goods :as sector} clearance reactionType]
-  {:pre [(s/assert ::ss/sector sector)
-         (s/assert ::ss/reactionType reactionType)
-         (s/assert ::ss/clearance clearance)]
-   :post [(s/assert ::ss/price %)]}
-  (log/trace "calculate-profitability of" clearance reactionType)
-  (let [cost (reduce + (for [[goodType qty] (get-in ss/reactions [reactionType :consumes])]
-                             (* qty (get-price sector clearance goodType))))
-        sell (reduce + (for [[goodType qty] (get-in ss/reactions [reactionType :produces])]
-                         (* qty (get-price sector clearance goodType))))
-        ]
-    (- sell cost)
-    )
-  )
