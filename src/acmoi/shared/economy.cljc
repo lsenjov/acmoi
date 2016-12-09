@@ -248,7 +248,7 @@
     nil
     )
   )
-(defn begin-sell-phase
+(defn- begin-sell-phase-inner
   "Sets all good ::quantityLast to ::quantity"
   [goods]
   {:pre [(h/valid? ::goods goods)]
@@ -260,7 +260,7 @@
        (apply merge {})
        )
   )
-(defn tick-market
+(defn begin-sell-phase
   "Performs all parts of the market phase"
   [econMap]
   {:pre [(h/valid? ::economyMap econMap)]
@@ -268,10 +268,6 @@
    }
   (-> econMap
       ;; Sell
-      (update-in [::goods] begin-sell-phase)
-
-      ;; Buy
-
-      ;; Adjust prices
+      (update-in [::goods] begin-sell-phase-inner)
       )
   )
