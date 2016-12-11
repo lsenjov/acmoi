@@ -10,6 +10,7 @@ Goods detail the base goods/resources themselves. Note that goods also includes 
 - Generation (possibility of it appearing in a district, maximum amount of resource if appearing [if it appears, picks a random number between 1 and the maximum). Items like buildable land might have a 1.0 chance of appearing, arable land a 0.4 chance, goldOre a 0.01 chance etc.
 - NonMoveable? Can this good/resource be moved from its current region?
 - NonTradeable? Can this good be traded? Used specifically for personal needs, and will be filtered as such (Mobile phones that fill the communication need, but only for the owner). NonTradeable reactions can't be stored, but can be used when satisfying Inid's needs.
+- NoTechLevel? If set, the tech level of this good isn't factored in to reactions. Used for things like land and other basic resources.
 
 ## reactions
 Every reaction is something an individual can perform, including transporting goods.
@@ -67,5 +68,13 @@ As an intermediary, some traders may operate as HFTs, operating on a single leve
 
 ## Tech Levels
 Every item has a tech level, which is a combination of the consumed goods, required goods, and labour used to complete the reaction. Inids will pay higher prices for higher tech level goods.
+
+Inids' tech level will rise extremely slowly (faster if the max cap is higher), or can be sped up by education.
+
+Each time an Inid sells their labour, their tech level rises 1% of the way to the regional max tech cap. If an Inid sells their labour 100 times, their tech level will be at 65% of the regional tech cap.
+
+If an Inid buys education, their tech level will rise a minimum of 0.1 and a maximum of 0.5. If the tech level of the education is at least 1 level less than their current tech level, it will rise 0.1. (Anything less than an entire tech level is useless). If the tech level of the education is at least 1.0 mor than the inid's current tech level, it will rise 0.5. If the TLs are the same, their tech level will rise 0.3.
+
+The max tech level of a region will degrade slowly over time, and is pushed up by Inids educating above the current maximum.
 
 TODO Figure out if floats can be used for the price calculations! Buy orders have minimum tech requirement?
