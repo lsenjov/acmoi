@@ -1,4 +1,5 @@
 {
  :goods "goods.edn"
  :reactions "reactions.edn"
+ :levels "levels.edn"
  }

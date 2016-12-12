@@ -13,7 +13,7 @@
          ;; If exists, is the chance from 0 to 1 that this good is generated in every region
          :genChance 0
          ;; If genenerated, this is the max amount of the resource that appears in the region
-         ;; The amount generated will be between 1 and the genAmount upper limit in a uniform distribution
+         ;; The amount generated will be between 1 and the genAmount upper limit in a uniform distribution (if this is 0, will still generate at least one if it's being genned)
          ;; Ignored if genChance is 0 or doesn't exist
          :genAmount 0
          ;; If true, the tech level for this good isn't factored into reactions

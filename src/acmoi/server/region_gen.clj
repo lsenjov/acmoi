@@ -6,7 +6,7 @@
             [acmoi.shared.spec :as ss]
             [acmoi.shared.economy :as es]
 
-            [acmoi.shared.helpers :as helpers]
+            [acmoi.shared.helpers :as h]
 
             [acmoi.server.db :as db]
             )
@@ -18,15 +18,82 @@
   "files.edn")
 
 (defn- assoc-keywords
-  "Given a map of keywords to objects, assocs the key under a :keyword index in value.
+  "Given a map of keywords to objects, assocs the key under a :ident index in value.
   Returns the map"
   [m]
   (apply merge
          {}
          (for [[k v] m]
-           {k (assoc v :keyword k)}
+           {k (assoc v :ident k)}
            )
          )
+  )
+
+(defn generate-goods
+  "Generates goods for a single, newly developed region and adds them as sell orders with a price of 0"
+  [goodsMap]
+  {:pre [(h/valid? (s/map-of keyword? map?) goodsMap)]}
+  (apply merge {}
+         (for [{:keys [ident genChance genAmount] :as good} (vals goodsMap)]
+           (if (< (rand) (if genChance genChance 0))
+             {ident {:price 0
+                     :ident ident
+                     :techLevel 0
+                     :qty (inc (rand-int (if genAmount genAmount 0)))}
+              }
+             nil
+             )
+           )
+         )
+  )
+
+(defn generate-region
+  "Recursively generates empty regions from a vector of levels.
+  Parent is a string. If nil, means it is the universe.
+  Saves each generated region into the database.
+  Returns the universe"
+  ([typeVec parent level]
+   {:pre [(h/valid? (s/coll-of map?) typeVec)
+          (h/valid? (s/nilable string?) parent)
+          (h/valid? (s/nilable integer?) level)
+          ]
+    }
+   (let [{:keys [title]} (first typeVec)
+         {:keys [numMin numMax transportCost]} (second typeVec)
+         id (db/get-new-id)
+         region {:_id id
+                 :level level
+                 :title title
+                 :parent parent
+                 :children (if (= 0 (count (rest typeVec)))
+                             ;; This is the lowest level
+                             nil
+                             ;; Still more levels to go
+                             (into []
+                                   (map :_id
+                                        ;; n is a range of numbers between numMin and numMax items
+                                        (for [n (range 0
+                                                       (+ numMin
+                                                          (rand-int (- (inc numMax)
+                                                                       numMin))))
+                                              ]
+                                          (generate-region (rest typeVec) id (inc level))
+                                          )
+                                        )
+                                   )
+                             )
+                 :transportCost transportCost
+                 }
+         ]
+     (db/upsert-region region)
+     region
+     )
+   )
+  ([typeVec]
+   (generate-region (concat [{:title "Universe"}] typeVec)
+                    nil
+                    0)
+   )
   )
 
 (defn reset-and-gen-new-world
@@ -38,11 +105,20 @@
   (try (let [files (clojure.edn/read-string (slurp filenames))
              goods (->> files :goods slurp clojure.edn/read-string assoc-keywords)
              reactions (->> files :reactions slurp clojure.edn/read-string assoc-keywords)
-             ;levels (->> files :levels slurp clojure.edn/read-string)
+             levels (->> files :levels slurp clojure.edn/read-string)
              ]
+         ;; Reset database
+         (db/reset-database)
+
+         ;; Generate regions
+         (generate-region levels)
+
+         ;; Add items to database
          (doall (for [[_ v] goods] (db/upsert-good v)))
          (doall (for [[_ v] reactions] (db/upsert-reaction v)))
          )
        (catch Exception e (do (log/error "Could not complete generation. Error:" e) nil))
        )
   )
+
+(reset-and-gen-new-world)

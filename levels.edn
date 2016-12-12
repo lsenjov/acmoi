@@ -1,0 +1,21 @@
+;; This takes a list of regions, from 1 to n. Region 0 is always universe
+[{;; Human readable note of this level
+  :title "Country"
+  ;; The minimum and maximum number of these per level, inclusive
+  :numMin 3
+  :numMax 6
+  ;; The amount of effort it takes to transport a good between here and one level up
+  ;; Note that it will cost twice this amount to move between the same level (once to go up a level, once back down)
+  :transportCost 1000
+  }
+ {:title "City"
+  :numMin 5
+  :numMax 30
+  :transportCost 200
+  }
+ {:title "District"
+  :numMin 1
+  :numMax 30
+  :transportCost 10
+  }
+ ]
