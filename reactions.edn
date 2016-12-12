@@ -1,0 +1,30 @@
+{:gathering {;; What this reaction is called
+             :title "Basic hunting and gathering"
+             ;; An optional longer description
+             :description "Primitive hunting and gathering on fertile land"
+             ;; What goods are consumed in this reaction, per time period
+             ;; labour is in minutes
+             :consumes {}
+             ;; What goods are produced in this reaction, per time period
+             :produces {:food 1}
+             ;; What goods are required to create this reaction, per time period
+             ;; Note that it consumes the good for the duration of the reaction, the produces it again afterwards, effectively locking it
+             :requires {:arableLand 10}
+             ;; How long this reaction takes in minutes. If a reaction has a duration of zero or no duration, it will still take an entire tick no matter the tick duration
+             :duration 240
+             }
+ :labouring {:title "Working for others"
+             :produces {:labour 240}
+             :duration 240
+             }
+ :ploughing {:title "Ploughing land"
+             :consumes {:arableLand 1}
+             :produces {:farmLand 1}
+             :duration 240
+             }
+ :farmingFood {:title "Basic food farming"
+               :produces {:food 4}
+               :requires {:farmLand 1}
+               :duration 240
+               }
+ }

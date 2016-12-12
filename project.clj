@@ -24,6 +24,9 @@
 
                  ;; Json Deps
                  [org.clojure/data.json "0.2.6"]
+
+                 ;; Mongodb Deps
+                 [com.novemberain/monger "3.1.0"]
                  ]
 
   :plugins [[lein-figwheel "0.5.8"]
