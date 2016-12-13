@@ -101,6 +101,10 @@
   [regionId]
   (mc/find-map-by-id db c-reg regionId)
   )
+(defn get-universe
+  "Gets the universe region"
+  []
+  (mc/find-one-as-map db c-reg {:level 0}))
 
 (defn upsert-good
   "Creates or updates a good in the database.
@@ -125,3 +129,4 @@
   [reactionId]
   (mc/find-map-by-id db c-reactions reactionId)
   )
+
