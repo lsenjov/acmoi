@@ -33,6 +33,8 @@
 (def ^:private c-reg "Collection for regions" "regions")
 (def ^:private c-goods "Collection for goods" "goods")
 (def ^:private c-reactions "Collection for reactions" "reactions")
+(def ^:private c-market "Collection for current items on the market" "market")
+(def ^:private c-history "Collection of previous trades on the market" "marketHistory")
 
 (defn get-new-id
   "Returns a unique mongo id"
@@ -60,6 +62,19 @@
   (mc/create db c-reactions {})
   ;; TODO create keys
 
+  ;; Create market collection
+  (mc/create db c-market {})
+  ;; TODO create keys
+  (mc/create-index db c-market {:ident 1})
+  (mc/create-index db c-market {:techLevel 1})
+  (mc/create-index db c-market {:price 1})
+
+  ;; Create market collection
+  (mc/create db c-history {})
+  ;; TODO create keys
+  (mc/create-index db c-history {:ident 1})
+  (mc/create-index db c-history {:techLevel 1})
+  (mc/create-index db c-history {:price 1})
   )
 
 (defn- upsert-item
@@ -130,3 +145,4 @@
   (mc/find-map-by-id db c-reactions reactionId)
   )
 
+;; TODO Functions for market and history

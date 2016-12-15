@@ -31,15 +31,17 @@
 
 (defn generate-goods
   "Generates goods for a single, newly developed region and adds them as sell orders with a price of 0"
-  [goodsMap]
+  ;; TODO Test
+  [goodsMap regionId]
   {:pre [(h/valid? (s/map-of keyword? map?) goodsMap)]}
   (apply merge {}
          (for [{:keys [ident genChance genAmount] :as good} (vals goodsMap)]
            (if (< (rand) (if genChance genChance 0))
-             {ident {:price 0
-                     :ident ident
-                     :techLevel 0
-                     :qty (inc (rand-int (if genAmount genAmount 0)))}
+             {:price 0
+              :ident ident
+              :techLevel 0
+              :qty (inc (rand-int (if genAmount genAmount 0)))
+              :region regionId
               }
              nil
              )
@@ -52,7 +54,7 @@
   Parent is a string. If nil, means it is the universe.
   Saves each generated region into the database.
   Returns the universe"
-  ([typeVec parent level]
+  ([typeVec goodsMap parent level]
    {:pre [(h/valid? (s/coll-of map?) typeVec)
           (h/valid? (s/nilable string?) parent)
           (h/valid? (s/nilable integer?) level)
@@ -77,11 +79,20 @@
                                                           (rand-int (- (inc numMax)
                                                                        numMin))))
                                               ]
-                                          (generate-region (rest typeVec) id (inc level))
+                                          (generate-region (rest typeVec)
+                                                           goodsMap
+                                                           id
+                                                           (inc level))
                                           )
                                         )
                                    )
                              )
+                 :goods (if (= 0 (count (rest typeVec)))
+                          ;; Lowest level
+                          (generate-goods goodsMap id)
+                          ;; Not lowest level
+                          {}
+                          )
                  :transportCost transportCost
                  }
          ]
@@ -89,8 +100,9 @@
      region
      )
    )
-  ([typeVec]
+  ([typeVec goodsMap]
    (generate-region (concat [{:title "Universe"}] typeVec)
+                    goodsMap
                     nil
                     0)
    )
@@ -111,7 +123,7 @@
          (db/reset-database)
 
          ;; Generate regions
-         (generate-region levels)
+         (generate-region levels goods)
 
          ;; Add items to database
          (doall (for [[_ v] goods] (db/upsert-good v)))
